@@ -13,7 +13,7 @@
     shell: /usr/sbin/nologin
     system: true
     createhome: false
-    home: /
+    home: "{{ coredns_homedir }}"
 
 - name: create coredns configuration directories
   file:
@@ -23,14 +23,14 @@
     group: root
     mode: 0755
   with_items:
-    - /etc/coredns
-    - /etc/coredns/zones
+    - "{{ coredns_homedir }}"
+    - "{{ coredns_homedir }}/zones"
 
 - block:
     - name: Download coredns binary to local folder
       become: false
       get_url:
-        url: "https://github.com/coredns/coredns/releases/download/v{{ coredns_version }}/coredns_{{ coredns_version }}_linux_{{ go_arch }}.tgz"
+        url: "{{ coredns_download_link }}"
         dest: "/tmp/coredns_{{ coredns_version }}_linux_{{ go_arch }}.tgz"
         checksum: "sha256:{{ coredns_checksum }}"
       register: _download_binary
@@ -51,29 +51,29 @@
 
     - name: Propagate coredns binaries
       copy:
-        src: "/tmp/coredns"
-        dest: "/usr/local/bin/coredns"
+        src: "{{ coredns_binary_local_dir }}/coredns"
+        dest: "{{ coredns_binary_remote_path }}"
         mode: 0750
         owner: "{{ coredns_system_user }}"
         group: "{{ coredns_system_group }}"
       notify: restart coredns
       when: not ansible_check_mode
-  when: coredns_binary_local_dir | length == 0
+  when: coredns_remote_download
 
 - name: propagate locally distributed coredns binary
   copy:
     src: "{{ coredns_binary_local_dir }}/coredns"
-    dest: "/usr/local/bin/coredns"
+    dest: "{{ coredns_binary_remote_path }}"
     mode: 0750
     owner: "{{ coredns_system_user }}"
     group: "{{ coredns_system_group }}"
-  when: coredns_binary_local_dir | length > 0
+  when: not coredns_remote_download
   notify: restart coredns
 
 - name: Copy the coredns systemd service file
   template:
-    src: coredns.service.j2
-    dest: /etc/systemd/system/coredns.service
+    src: "coredns.service.j2"
+    dest: "/etc/systemd/system/coredns.service"
     owner: root
     group: root
     mode: 0644

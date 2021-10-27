@@ -16,6 +16,6 @@
 
 - name: "Get checksum for {{ go_arch }} architecture"
   set_fact:
-    coredns_checksum: "{{ lookup('url', 'https://github.com/coredns/coredns/releases/download/v' + coredns_version + '/coredns_' + coredns_version + '_linux_' + go_arch + '.tgz.sha256').split(' ')[0] }}"
+    coredns_checksum: "{{ lookup('url', coredns_download_link + '.sha256').split(' ')[0] }}"
   run_once: true
-  when: coredns_binary_local_dir | length == 0
+  when: coredns_remote_download
