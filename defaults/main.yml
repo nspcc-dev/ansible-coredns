@@ -1,12 +1,16 @@
 ---
 coredns_version: 1.8.3
+coredns_download_link: "https://github.com/coredns/coredns/releases/download/v{{ coredns_version }}/coredns_{{ coredns_version }}_linux_{{ go_arch }}.tgz"
 coredns_dns_port: 53
 
 # Config file name, searched in ansible templates path.
 coredns_config_file: ""
 
 # Use a local binary instead of the official release.
-coredns_binary_local_dir: ""
+coredns_remote_download: True
+coredns_binary_local_dir: "/tmp"
+
+coredns_binary_remote_path: "/usr/local/bin/coredns"
 
 coredns_zone_files_paths:
   - "coredns/zones/*"

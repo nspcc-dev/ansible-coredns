@@ -2,7 +2,7 @@
 - name: Copy configuration file
   template:
     src: "{{ coredns_config_file }}"
-    dest: /etc/coredns/Corefile
+    dest: "{{ coredns_homedir }}/Corefile"
     owner: root
     group: root
     mode: 0644
@@ -11,7 +11,7 @@
 - name: Copy zone files
   template:
     src: "{{ item }}"
-    dest: /etc/coredns/zones
+    dest: "{{ coredns_homedir }}/zones"
     owner: root
     group: root
     mode: 0644
