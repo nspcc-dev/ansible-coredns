@@ -23,3 +23,6 @@
     enabled: true
   tags:
     - coredns_run
+
+- import_tasks: cleanup.yml
+  when: coredns_local_artifacts_cleanup

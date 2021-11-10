@@ -1,16 +1,22 @@
 ---
 coredns_version: 1.8.3
 coredns_download_link: "https://github.com/coredns/coredns/releases/download/v{{ coredns_version }}/coredns_{{ coredns_version }}_linux_{{ go_arch }}.tgz"
-coredns_dns_port: 53
-
-# Config file name, searched in ansible templates path.
-coredns_config_file: ""
 
 # Use a local binary instead of the official release.
 coredns_remote_download: True
 coredns_binary_local_dir: "/tmp"
-
+coredns_tarball_local_path: "/tmp/coredns_{{ coredns_version }}_linux_{{ go_arch }}.tgz"
+coredns_binary_local_path: "{{ coredns_binary_local_dir }}/coredns"
 coredns_binary_remote_path: "/usr/local/bin/coredns"
+
+# Do we need to cleanup tarball and binary from ansible
+# controller after installation?
+coredns_local_artifacts_cleanup: True
+
+# Config file name, searched in ansible templates path.
+coredns_config_file: ""
+
+coredns_dns_port: 53
 
 coredns_zone_files_paths:
   - "coredns/zones/*"

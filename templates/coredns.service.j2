@@ -18,7 +18,7 @@ WorkingDirectory=/etc/coredns
 
 User={{ coredns_system_user }}
 Group={{ coredns_system_group }}
-ExecStart=/usr/local/bin/coredns \
+ExecStart={{ coredns_binary_remote_path }} \
     -conf /etc/coredns/Corefile \
     -dns.port "{{ coredns_dns_port }}"
 
