@@ -1,0 +1,10 @@
+---
+
+- name: Remove coredns tarball and binary
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ coredns_tarball_local_path }}"
+    - "{{ coredns_binary_local_path }}"
+  delegate_to: localhost
